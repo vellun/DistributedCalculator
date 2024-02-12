@@ -16,8 +16,8 @@ func New(params DBParams) {
 			id INT generated always AS IDENTITY PRIMARY KEY,
 			expression VARCHAR NOT NULL,
 			status VARCHAR NOT NULL,
-			started_at TIMESTAMP,
-			ended_at TIMESTAMP);
+			started_at INT,
+			ended_at INT);
 		CREATE TABLE IF NOT EXISTS operations(
 			id INT generated always AS IDENTITY PRIMARY KEY,
 			name VARCHAR NOT NULL,
@@ -28,14 +28,18 @@ func New(params DBParams) {
 			status VARCHAR);
 		CREATE TABLE IF NOT EXISTS tasks(
 			id INT generated always AS IDENTITY PRIMARY KEY,
-			first_operand INT,
-			second_operand INT,
-			operation_id VARCHAR,
+			operand1 INT,
+			operand2 INT,
+			task_id1 INT,
+			task_id2 INT,
+			operation_id INT,
 			status VARCHAR,
 			seq_number INTEGER NOT NULL,
-			expression_id int,
-			FOREIGN KEY (expression_id) REFERENCES expressions (id)
-			FOREIGN KEY (operation_id) REFERENCES operations (id))`
+			expression_id INT,
+			FOREIGN KEY (expression_id) REFERENCES expressions (id),
+			FOREIGN KEY (operation_id) REFERENCES operations (id),
+			FOREIGN KEY (task_id1) REFERENCES tasks (id),
+			FOREIGN KEY (task_id2) REFERENCES tasks (id))`
 
 	_, err := conn.Exec(context.Background(), create_tables_stmt)
 	if err != nil {
@@ -70,10 +74,10 @@ func New(params DBParams) {
 	}
 	// Добавляем доступные операции
 	var insertStmt string = `INSERT INTO operations(name, duration) VALUES 
-							('plus', 200),
-							('minus', 200), 
-							('times', 200), 
-							('divide', 200)`
+							('+', 200),
+							('-', 200), 
+							('*', 200), 
+							('/', 200)`
 	_, err = conn.Exec(context.Background(), insertStmt)
 	if err != nil {
 		fmt.Printf("Exec for insert operations into table failed: %v\n", err)

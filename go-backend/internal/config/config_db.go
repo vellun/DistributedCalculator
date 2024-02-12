@@ -2,6 +2,7 @@ package config
 
 import (
 	"distributed-calculator/internal/database"
+	"errors"
 	"log"
 	"os"
 	"regexp"
@@ -10,7 +11,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-func Сreate_all_tables_in_db() {
+func GetDBParams() (database.DBParams, error) {
 	// Загружаем виртуальное окружение
 	projectName := regexp.MustCompile(`^(.*` + `go-backend` + `)`)
 	currentWorkDirectory, _ := os.Getwd()
@@ -18,46 +19,56 @@ func Сreate_all_tables_in_db() {
 
 	if err := godotenv.Load(string(rootPath) + `/.env`); err != nil {
 		log.Print("No .env file found")
-		return
+		return database.DBParams{}, err
 	}
 
 	// Получаем переменные для бд
 	db_host, found := os.LookupEnv("DB_HOST")
 	if !found {
 		env_var_not_found("DB_HOST")
-		return
+		return database.DBParams{}, errors.New("Param not found")
 	}
 
 	port, found := os.LookupEnv("DB_PORT")
 	if !found {
 		env_var_not_found("DB_PORT")
-		return
+		return database.DBParams{}, errors.New("Param not found")
 	}
 	db_port, err := strconv.Atoi(port)
 	if err != nil {
 		log.Printf("Error: Invalid type for DB_PORT. Must be integer")
-		return
+		return database.DBParams{}, errors.New("Param not found")
 	}
 
 	db_name, found := os.LookupEnv("DB_NAME")
 	if !found {
 		env_var_not_found("DB_NAME")
-		return
+		return database.DBParams{}, errors.New("Param not found")
 	}
 	db_user, found := os.LookupEnv("DB_USER")
 	if !found {
 		env_var_not_found("DB_USER")
-		return
+		return database.DBParams{}, errors.New("Param not found")
 	}
 	db_pass, found := os.LookupEnv("DB_PASS")
 	if !found {
 		env_var_not_found("DB_PASS")
-		return
+		return database.DBParams{}, errors.New("Param not found")
+	}
+	return database.DBParams{Host: db_host, Port: db_port,
+		Username: db_user, Password: db_pass,
+		DBName: db_name}, nil
+
+}
+
+func Сreate_all_tables_in_db() {
+	DBParams, err := GetDBParams()
+
+	if err != nil {
+		log.Println("Error with db params")
 	}
 
-	database.New(database.DBParams{Host: db_host, Port: db_port,
-		Username: db_user, Password: db_pass,
-		DBName: db_name})
+	database.New(DBParams)
 
 }
 

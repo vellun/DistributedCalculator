@@ -1,12 +1,15 @@
 package orchesrtator
 
-import (
-	"distributed-calculator/pkg/parser"
-	"fmt"
-)
+// import (
+// 	"distributed-calculator/pkg/parser"
+// 	"fmt"
+// 	"strconv"
+// )
 
-func Orchestrator(exp string) {
-	_, err := parser.ParseExpression(exp)
-	fmt.Println(err)
 
+
+func Orchestrator(exp string) error {
+	DistributeTask(exp)
+
+	return nil
 }

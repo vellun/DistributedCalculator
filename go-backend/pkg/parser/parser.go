@@ -1,16 +1,17 @@
 package parser
 
 import (
+	"distributed-calculator/pkg/database"
 	"fmt"
 )
 
-var prefix_string string
+var postfix_slice []string
 
-func ParseExpression(exp string) (string, error) {
-	token_list, err := ValidateExpression(exp) // Функция находится в файле validator.go
+func ParseExpression(exp string) ([]string, int, error) {
+	token_list, exp, err := ValidateExpression(exp) // Функция находится в файле validator.go
 	if err != nil {
 		fmt.Println("Выражение некорректно")
-		return "", err
+		return nil, 0, err
 	}
 
 	tokens := &Tokens{List: token_list}
@@ -18,21 +19,27 @@ func ParseExpression(exp string) (string, error) {
 
 	if err != nil {
 		fmt.Println("Ошибка при парсинге")
-		return "", err
+		return nil, 0, err
 	}
 
-	get_prefix_string(tree) // Получаем выражение в префиксной форме
-	// Например выражение 1 + 2 * 3 примет вид + 1 * 2 3 (сначала корень, потом дочерние узлы)
+	// Если выражение прошло все проверки, добавляем его в бд
+	exp_id, err := database.AddExpressionIntoDB(&database.Expression{Expression: exp, Status: "process"})
+	if err != nil {
+		return nil, 0, err
+	}
 
-	return prefix_string, nil
+	get_postfix_string(tree) // Получаем выражение в постфиксной форме
+	// Например выражение 1 + 2 * 3 примет вид 123*+
+
+	return postfix_slice, exp_id, nil
 }
 
 // Функция рекурсивно обходит дерево
-func get_prefix_string(tree *Node) {
+func get_postfix_string(tree *Node) {
 	if tree == nil {
 		return
 	}
-	prefix_string += tree.Value
-	get_prefix_string(tree.Left)
-	get_prefix_string(tree.Right)
+	get_postfix_string(tree.Left)
+	get_postfix_string(tree.Right)
+	postfix_slice = append(postfix_slice, tree.Value)
 }

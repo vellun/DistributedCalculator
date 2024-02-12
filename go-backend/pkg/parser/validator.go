@@ -7,14 +7,14 @@ import (
 )
 
 // Функция проверяет выражение на корректность
-func ValidateExpression(exp string) ([]string, error) {
+func ValidateExpression(exp string) ([]string, string, error) {
 	var list []string
 
 	exp = strings.Join(strings.Fields(exp), "")
 
-	// Если в начале выражения не число
-	if _, err := strconv.Atoi(string(exp[0])); err != nil {
-		return nil, errors.New("Выражение должно начинаться с числа")
+	// Если в начале выражения не число и не открывающаяся скобка
+	if _, err := strconv.Atoi(string(exp[0])); err != nil && string(exp[0]) != "(" {
+		return nil, "", errors.New("Выражение должно начинаться с числа")
 	}
 
 	var num string // Строка, в которой собираются цифры числа
@@ -32,7 +32,7 @@ func ValidateExpression(exp string) ([]string, error) {
 			list = append(list, token)
 		default:
 			if _, err := strconv.Atoi(token); err != nil {
-				return nil, errors.New("Найден недопустимый символ")
+				return nil, "", errors.New("Найден недопустимый символ")
 			}
 			num += token
 		}
@@ -48,6 +48,6 @@ func ValidateExpression(exp string) ([]string, error) {
 
 	list = append(list, "end") //Обозначим конец выражения(нужно при создании дерева)
 
-	return list, nil
+	return list, exp, nil
 
 }
