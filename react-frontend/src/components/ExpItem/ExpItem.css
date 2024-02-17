@@ -1,0 +1,18 @@
+.expression {
+    display: flex;
+    padding: 15px;
+    /* border: 2px solid teal; */
+    background-color: rgb(42, 42, 45);
+    border-radius: 15px;
+    margin-top: 20px;
+    justify-content: space-between;
+    align-items: center;
+    width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+ul {
+    list-style: none;
+    margin-top: 10px;
+}

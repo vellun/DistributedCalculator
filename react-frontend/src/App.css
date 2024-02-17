@@ -1,0 +1,18 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#root {
+    display: flex;
+    justify-content: center;
+    color: rgb(205, 211, 216);
+    font-family: "Open Sans", sans-serif;
+    height: 100%;
+}
+
+.App {
+    width: 100%;
+    align-items: center;
+}
