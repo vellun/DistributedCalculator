@@ -14,7 +14,7 @@ function Calculator() {
     e.target.reset();
     try {
       const resp = await axios.post(
-        "http://localhost:8080/expression/",
+        "http://localhost:8000/expression/",
         {
           Exp: Exp,
         },

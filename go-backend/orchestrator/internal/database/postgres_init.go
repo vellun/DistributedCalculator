@@ -15,7 +15,7 @@ func New(params DBParams) {
 			id INT generated always AS IDENTITY PRIMARY KEY,
 			expression VARCHAR NOT NULL,
 			status VARCHAR NOT NULL,
-			result INT,
+			result VARCHAR,
 			started_at INT,
 			ended_at INT);
 		CREATE TABLE IF NOT EXISTS operations(
@@ -78,10 +78,10 @@ func New(params DBParams) {
 	conn = Connect(params)
 	// Добавляем доступные операции
 	var insertStmt string = `INSERT INTO operations(name, duration) VALUES 
-							('+', 200),
-							('-', 200), 
-							('*', 200), 
-							('/', 200)`
+							('+', 10),
+							('-', 10), 
+							('*', 10), 
+							('/', 10)`
 	_, err = conn.Exec(context.Background(), insertStmt)
 	if err != nil {
 		fmt.Printf("Exec for insert operations into table failed: %v\n", err)

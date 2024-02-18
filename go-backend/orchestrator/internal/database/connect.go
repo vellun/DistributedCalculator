@@ -16,6 +16,7 @@ type DBParams struct {
 	DBName   string
 }
 
+// Возвращает новое соединение с бд
 func Connect(params DBParams) (conn *pgxpool.Conn) {
 	db_url := fmt.Sprintf("postgres://%s:%s@%s:%d/%s", params.Username, params.Password,
 		params.Host, params.Port, params.DBName)

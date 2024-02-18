@@ -20,7 +20,7 @@
     "eject": "react-scripts eject"
   },
   "proxy": {
-    "*":{ "target" : "http://localhost:8080"}
+    "*":{ "target" : "http://localhost:8000"}
  }, 
   "eslintConfig": {
     "extends": [

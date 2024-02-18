@@ -22,7 +22,9 @@ func AddTaskIntoDB(task *models.Task) error {
 	// Если в качестве одного из членов подвыражения должна быть ссылка на другое подвыражение
 	// Нужно получить id этого подвыражения из бд(их может быть сразу два)
 	if task.Task_id1 != 0 || task.Task_id2 != 0 {
+		fmt.Println(task.Task_id1, task.Task_id2)
 		task.Task_id1, task.Task_id2 = GetTasksId(task, conn)
+		fmt.Println("aa", task.Task_id1, task.Task_id2)
 	}
 
 	var insertStmt string
@@ -31,7 +33,6 @@ func AddTaskIntoDB(task *models.Task) error {
 		insertStmt = fmt.Sprintf("INSERT INTO tasks(expression_id, status, task_id1, task_id2, seq_number, operation_id) VALUES (%d, '%s', %d, %d, %d, %d)",
 			task.Exp_id, "process", task.Task_id1, task.Task_id2, task.Id, GetOperationId(task, conn))
 	} else if task.Task_id1 == 0 && task.Task_id2 == 0 {
-		fmt.Println(GetOperationId(task, conn))
 		insertStmt = fmt.Sprintf("INSERT INTO tasks(expression_id, operand1, operand2, status, seq_number, operation_id) VALUES (%d, %s, %s, '%s', %d, %d)",
 			task.Exp_id, task.Operand1, task.Operand2, "process", task.Id, GetOperationId(task, conn))
 	} else if task.Task_id1 == 0 {
@@ -57,7 +58,8 @@ func GetTasksId(task *models.Task, conn *pgxpool.Conn) (int, int) {
 	)
 	if task.Task_id1 != 0 {
 		task_stmt1 = task.Task_id1
-	} else {
+	}
+	if task.Task_id2 != 0 {
 		task_stmt2 = task.Task_id2
 	}
 	var selectStmt1 string = fmt.Sprintf("SELECT id FROM tasks WHERE seq_number=%d AND expression_id=%d;", task_stmt1, task.Exp_id)

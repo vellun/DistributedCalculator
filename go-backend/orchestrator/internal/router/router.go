@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func NewRouter() *gin.Engine{
+func NewRouter() *gin.Engine {
 	router := gin.Default()
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:3000"},
@@ -25,6 +25,7 @@ func NewRouter() *gin.Engine{
 	router.GET("/expressions/", handler.GetExpressionsHandler)
 	router.GET("/waiting-task/", handler.GetWaitingTaskHandler)
 	router.POST("/expression/", handler.PostExpressionHandler)
+	router.POST("/task/", handler.PostResultTaskHandler)
 
 	return router
 }

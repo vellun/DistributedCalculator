@@ -7,7 +7,7 @@ function ExpressionsList() {
   const [expressions, setExp] = useState([]);
 
   async function fetchExps() {
-    const resp = await axios.get("http://localhost:8080/expressions/");
+    const resp = await axios.get("http://localhost:8000/expressions/");
     console.log(resp)
     setExp(resp.data);
   }
@@ -26,7 +26,9 @@ function ExpressionsList() {
                 <ExpItem
                   expression={exp.expression}
                   status={exp.status}
-                  start_date={exp.start_date}
+                  started_at={exp.started_at}
+                  ended_at={exp.ended_at}
+                  result={exp.result}
                 />
               </li>
             ))}{" "}

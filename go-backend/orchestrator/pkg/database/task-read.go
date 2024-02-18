@@ -41,7 +41,6 @@ func GetWaitingTask() (*models.Task, error) {
 		AND tasks.operand1 IS NOT NULL
 		AND tasks.operand2 IS NOT NULL ORDER BY tasks.id;
 	`, exp_id)
-
 	is_null_stmt := fmt.Sprintf(`SELECT COUNT(*) FROM tasks 
 			JOIN operations ON tasks.operation_id=operations.id
 			WHERE tasks.expression_id = %d 

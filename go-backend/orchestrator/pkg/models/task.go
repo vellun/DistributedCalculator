@@ -10,5 +10,6 @@ type Task struct {
 	Task_id2   int    `json:"task_id2"`
 	Status     string `json:"status"` // waiting/process/complete
 	Seq_number int    `json:"seq_number"`
-	Duration   int    `json:"duratiion"`
+	Duration   int    `json:"duration"`
+	Result     int    `json:"result"`
 }

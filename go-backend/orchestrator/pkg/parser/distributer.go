@@ -13,17 +13,16 @@ func DistributeTask(exp string) error {
 		fmt.Println(err)
 		return err
 	}
-	fmt.Println("postfix", postfix_slice)
 
 	var cnt int
 	for {
+		cnt++
 		if len(postfix_slice) == 1 {
 			break
 		}
-		l, _, r, task := GetTask(postfix_slice, cnt)
+		l, _, r, task := GetTask(postfix_slice)
 
-		fmt.Println(postfix_slice)
-
+		task.Id = cnt
 		task.Operation = postfix_slice[r]
 		task.Exp_id = exp_id                // Устанавливаем для подвыражения id выражения
 		err := database.AddTaskIntoDB(task) // Добавляем подвыражение в бд
@@ -39,8 +38,7 @@ func DistributeTask(exp string) error {
 }
 
 // Функция ищет в постфиксной записи подвыражения
-func GetTask(postfix_slice []string, cnt int) (int, int, int, *models.Task) {
-	cnt++
+func GetTask(postfix_slice []string) (int, int, int, *models.Task) {
 	var (
 		l int = 0
 		m int = 1
@@ -53,14 +51,14 @@ func GetTask(postfix_slice []string, cnt int) (int, int, int, *models.Task) {
 		p := postfix_slice[r]
 		if p == "+" || p == "-" || p == "*" || p == "/" { // Если правый указатель попал на оператора
 			if err1 == nil && err2 == nil { // Если два токена перед оператором - числа
-				task := &models.Task{Id: cnt, Operand1: postfix_slice[l],
+				task := &models.Task{Operand1: postfix_slice[l],
 					Operand2: postfix_slice[m]}
 				return l, m, r, task
 
 				// Если первый токен - подвыражение, а второй - число
 			} else if string(postfix_slice[l][:len(postfix_slice[l])-1]) == "task" && err2 == nil {
 				token, _ := strconv.Atoi(string(postfix_slice[l][len(postfix_slice[l])-1]))
-				task := &models.Task{Id: cnt, Task_id1: token,
+				task := &models.Task{Task_id1: token,
 					Operand2: postfix_slice[m]}
 				return l, m, r, task
 
@@ -69,15 +67,14 @@ func GetTask(postfix_slice []string, cnt int) (int, int, int, *models.Task) {
 				string(postfix_slice[m][:len(postfix_slice[m])-1]) == "task" {
 				token1, _ := strconv.Atoi(string(postfix_slice[l][len(postfix_slice[l])-1]))
 				token2, _ := strconv.Atoi(string(postfix_slice[m][len(postfix_slice[m])-1]))
-				task := &models.Task{Id: cnt, Task_id1: token1,
-					Task_id2: token2}
+				task := &models.Task{Task_id1: token1, Task_id2: token2}
 				return l, m, r, task
 
 				// Если первый токен - число, а второй - подвыражение
 			} else if err1 == nil && string(postfix_slice[m][:len(postfix_slice[m])-1]) == "task" {
 				token, _ := strconv.Atoi(string(postfix_slice[m][len(postfix_slice[m])-1]))
 				fmt.Println("token", token)
-				task := &models.Task{Id: cnt, Operand1: postfix_slice[l],
+				task := &models.Task{Operand1: postfix_slice[l],
 					Task_id2: token}
 				return l, m, r, task
 			}
