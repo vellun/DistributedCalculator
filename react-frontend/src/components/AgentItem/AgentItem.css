@@ -1,4 +1,4 @@
-.expression {
+.agent {
     display: flex;
     padding: 15px;
     background-color: rgb(42, 42, 45);
@@ -6,12 +6,7 @@
     margin-top: 20px;
     justify-content: space-between;
     align-items: center;
-    width: 800px;
+    width: 700px;
     margin-left: auto;
     margin-right: auto;
-}
-
-ul {
-    list-style: none;
-    margin-top: 10px;
 }

@@ -1,8 +1,9 @@
 package main
 
 import (
+	// "distributed-calculator/agent"
+	// "distributed-calculator/orchestrator/internal/database"
 	"distributed-calculator/agent"
-	"distributed-calculator/orchestrator/internal/database"
 	"distributed-calculator/orchestrator/internal/router"
 	"fmt"
 )
@@ -12,13 +13,12 @@ const (
 )
 
 func main() {
-	database.InitRepository()
+	// database.InitRepository()
 	router := router.NewRouter()
 
-	agents := agent.NewResources()
-	agents.Init()
+	agent.Resources.Init() // Создаются агенты
 
-	agent.RunAgentManager(agents) // Запускаем горутину менеджера агентов
+	// agent.RunAgentManager(agents) // Запускаем горутину менеджера агентов
 	// Она запустит агентов(горутины), которые будут запрашивать у оркестратора задачи для решения через установленные промежутки времени,
 	// а затем отправлять на решение одному из своих воркеров(горутина)
 

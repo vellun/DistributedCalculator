@@ -1,4 +1,4 @@
-.myBtn {
+button {
     padding: 10px 15px;
     color: rgb(94, 189, 165);
     font-size: 16px;
@@ -9,7 +9,17 @@
     transition: 0.3s;
 }
 
-.myBtn:hover {
+button:hover {
     background-color: rgb(53, 52, 55);
     color: rgb(124, 237, 209);
+}
+
+.disconnect_btn {
+    color: rgb(176, 54, 54);
+    border: 1px solid rgb(176, 54, 54);
+}
+
+.disconnect_btn:hover {
+    color: rgb(243, 59, 59);
+    border: 1px solid rgb(176, 54, 54);
 }

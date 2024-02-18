@@ -34,9 +34,6 @@ function ExpItem({ expression, status, result, started_at, ended_at }) {
           <li>Ended at: {ended_at}</li>
         </ul>
       </div>
-      <div className="exp_btns">
-        <Button>Show details</Button>
-      </div>
     </div>
   );
 }

@@ -22,10 +22,13 @@ func NewRouter() *gin.Engine {
 		MaxAge: 12 * time.Hour,
 	}))
 
-	router.GET("/expressions/", handler.GetExpressionsHandler)
-	router.GET("/waiting-task/", handler.GetWaitingTaskHandler)
-	router.POST("/expression/", handler.PostExpressionHandler)
-	router.POST("/task/", handler.PostResultTaskHandler)
+	router.GET("/expressions/", handler.GetExpressionsHandler)       // Получить все выражения из бд
+	router.GET("/operations/", handler.GetOperationsHandler)         // Получить все операции из бд(+, -, *, /)
+	router.GET("/waiting-task/", handler.GetWaitingTaskHandler)      // Получить задачу, которую можно посчитать
+	router.GET("/agents/", handler.GetAgentsHandler)                 // Получить агентов
+	router.POST("/expression/", handler.PostExpressionHandler)       // Получить введенное пользователем выражение
+	router.POST("/task/", handler.PostResultTaskHandler)             // Получить посчитанную задачу
+	router.POST("/operation/", handler.PostOperationDurationHandler) // Получить введенную пользователем длительность выполнения задачи
 
 	return router
 }

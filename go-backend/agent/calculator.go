@@ -60,6 +60,6 @@ func PostTask(task *models.Task, agent *Agent) {
 		fmt.Println(err)
 		return
 	}
-	agent.Goroutines-- // Горутина отработала, можно отнимать
+	agent.Goroutines-- // Горутина отработала, отнимаем 1 от общего количества работающих горутин у агента
 	fmt.Println("Задача отправлена оркестратору агентом", agent.Id)
 }

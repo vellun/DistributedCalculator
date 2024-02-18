@@ -4,6 +4,8 @@ type CompResources struct { // Структура со всеми вычисли
 	Agents []*Agent
 }
 
+var Resources *CompResources = NewResources()
+
 func NewResources() *CompResources {
 	return &CompResources{[]*Agent{}}
 }
