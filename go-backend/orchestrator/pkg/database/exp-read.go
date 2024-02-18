@@ -2,7 +2,6 @@ package database
 
 import (
 	"context"
-	"distributed-calculator/orchestrator/internal/config"
 	"distributed-calculator/orchestrator/internal/database"
 	"distributed-calculator/orchestrator/pkg/models"
 	"errors"
@@ -10,11 +9,7 @@ import (
 )
 
 func GetAllExpressions() ([]models.Expression, error) {
-	DBParams, err := config.GetDBParams()
-	if err != nil {
-		return nil, errors.New("Cannont connect to database. Params are wrong")
-	}
-	conn := database.Connect(DBParams)
+	conn := database.Connect()
 
 	rows, err := conn.Query(context.Background(), "SELECT id, expression, status, started_at, ended_at, COALESCE(result, '') FROM expressions;")
 	if err != nil {
