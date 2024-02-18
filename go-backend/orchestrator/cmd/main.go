@@ -1,7 +1,6 @@
 package main
 
 import (
-	// "context"
 	"distributed-calculator/agent"
 	"distributed-calculator/orchestrator/internal/database"
 	"distributed-calculator/orchestrator/internal/router"
@@ -12,10 +11,8 @@ const (
 	port = ":8000"
 )
 
-var Repo database.Repository = *database.NewRepository(database.Pool)
-
 func main() {
-	// Repo.Init(context.Background())
+	database.InitRepository()
 	router := router.NewRouter()
 
 	agents := agent.NewResources()

@@ -5,24 +5,18 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/jackc/pgx/v4/pgxpool"
+	"github.com/jackc/pgx/v4"
 )
 
-var Pool *pgxpool.Pool = GetPool() // К этому пулу обращаются из всех частей приложения для связи с бд
-
-type Repository struct {
-	db *pgxpool.Pool
-}
-
-func NewRepository(db *pgxpool.Pool) *Repository {
-	return &Repository{
-		db: db,
+func Connect() *pgx.Conn {
+	params, err := GetDBParams()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Unable to get database params: %v\n", err)
+		os.Exit(1)
 	}
-}
-
-func Connect() (*pgxpool.Conn) {
-	pool := GetPool()
-	conn, err := pool.Acquire(context.Background())
+	db_url := fmt.Sprintf("postgres://%s:%s@%s:%d/%s", params.Username, params.Password,
+		params.Host, params.Port, params.DBName)
+	conn, err := pgx.Connect(context.Background(), db_url)
 	if err != nil {
 		fmt.Printf("Unable to acquire a database connection: %v\n", err)
 		return nil
@@ -30,7 +24,7 @@ func Connect() (*pgxpool.Conn) {
 	return conn
 }
 
-func (r *Repository) Init(ctx context.Context) { // Создание всех таблиц в бд
+func InitRepository() { // Создание всех таблиц в бд
 	var create_tables_stmt = `
 		CREATE TABLE IF NOT EXISTS expressions(
 			id INT generated always AS IDENTITY PRIMARY KEY,
@@ -63,7 +57,9 @@ func (r *Repository) Init(ctx context.Context) { // Создание всех т
 			FOREIGN KEY (task_id1) REFERENCES tasks (id),
 			FOREIGN KEY (task_id2) REFERENCES tasks (id))`
 
-	_, err := r.db.Exec(context.Background(), create_tables_stmt)
+	conn := Connect()
+	defer conn.Close(context.Background())
+	_, err := conn.Exec(context.Background(), create_tables_stmt)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Exec for create tables failed: %v\n", err)
 		return
@@ -73,7 +69,7 @@ func (r *Repository) Init(ctx context.Context) { // Создание всех т
 	var n int
 
 	// Проверяем пустая ли таблица с операциями
-	num, _ := r.db.Query(context.Background(), "SELECT COUNT(*) FROM operations;")
+	num, _ := conn.Query(context.Background(), "SELECT COUNT(*) FROM operations;")
 	for num.Next() {
 		num.Scan(&n)
 		// Если не пустая, ничего не делаем и выходим
@@ -88,15 +84,16 @@ func (r *Repository) Init(ctx context.Context) { // Создание всех т
 							('-', 10), 
 							('*', 10), 
 							('/', 10)`
-	_, err = r.db.Exec(context.Background(), insertStmt)
+	_, err = conn.Exec(context.Background(), insertStmt)
 	if err != nil {
 		fmt.Printf("Exec for insert operations into table failed: %v\n", err)
 	}
 	fmt.Println("Succesfully inserted default operations)")
 
+	// Добавляем вычислители
 	for i := 0; i < 3; i++ {
 		stmt := "INSERT INTO computing_resources(ind, status) VALUES (%d, 'running')"
-		_, err := r.db.Exec(context.Background(), fmt.Sprintf(stmt, i+1))
+		_, err := conn.Exec(context.Background(), fmt.Sprintf(stmt, i+1))
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Exec for set default computing resources failed: %v\n", err)
 			return

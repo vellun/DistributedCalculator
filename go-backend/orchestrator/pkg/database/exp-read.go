@@ -10,8 +10,9 @@ import (
 
 func GetAllExpressions() ([]models.Expression, error) {
 	conn := database.Connect()
+	defer conn.Close(context.Background())
 
-	rows, err := conn.Query(context.Background(), "SELECT id, expression, status, started_at, ended_at, COALESCE(result, '') FROM expressions;")
+	rows, err := conn.Query(context.Background(), "SELECT id, expression, status, started_at, ended_at, COALESCE(result, '') FROM expressions ORDER BY id DESC;")
 	if err != nil {
 		return nil, errors.New(fmt.Sprintf("Query for select expressions from table failed: %v\n", err))
 	}

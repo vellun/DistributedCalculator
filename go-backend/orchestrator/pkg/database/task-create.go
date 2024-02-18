@@ -9,6 +9,7 @@ import (
 
 func AddTaskIntoDB(task *models.Task) error {
 	conn := database.Connect()
+	defer conn.Close(context.Background())
 
 	// Если в качестве одного из членов подвыражения должна быть ссылка на другое подвыражение
 	// Нужно получить id этого подвыражения из бд(их может быть сразу два)
@@ -60,6 +61,7 @@ func GetTasksId(task *models.Task) (int, int) {
 	)
 
 	conn := database.Connect()
+	defer conn.Close(context.Background())
 	// Получаем id нужного подвыражения
 	id1, _ := conn.Query(context.Background(), selectStmt1)
 	for id1.Next() {
@@ -67,6 +69,7 @@ func GetTasksId(task *models.Task) (int, int) {
 	}
 
 	conn = database.Connect()
+	defer conn.Close(context.Background())
 	id2, _ := conn.Query(context.Background(), selectStmt2)
 	for id2.Next() {
 		id2.Scan(&task_id2)
@@ -77,6 +80,7 @@ func GetTasksId(task *models.Task) (int, int) {
 func GetOperationId(task *models.Task) int {
 	var id int
 	conn := database.Connect()
+	defer conn.Close(context.Background())
 	stmt := fmt.Sprintf("SELECT id FROM operations WHERE name='%s';", task.Operation)
 	op_id, _ := conn.Query(context.Background(), stmt)
 	for op_id.Next() {

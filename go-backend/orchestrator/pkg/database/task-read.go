@@ -11,6 +11,7 @@ import (
 // Функция берет из бд первое найденное подвыражение со статусом waiting
 func GetWaitingTask() (*models.Task, error) {
 	conn := database.Connect()
+	defer conn.Close(context.Background())
 
 	rows, err := conn.Query(context.Background(), "SELECT id FROM expressions WHERE status = 'process' ORDER BY id;")
 	if err != nil {
@@ -45,6 +46,7 @@ func GetWaitingTask() (*models.Task, error) {
 	var n int
 
 	conn = database.Connect()
+	defer conn.Close(context.Background())
 	num, err := conn.Query(context.Background(), is_null_stmt)
 	if err != nil {
 		return nil, errors.New(fmt.Sprintf("Query for select task from table failed: %v\n", err))
@@ -59,6 +61,7 @@ func GetWaitingTask() (*models.Task, error) {
 	}
 
 	conn = database.Connect()
+	defer conn.Close(context.Background())
 	rows, err = conn.Query(context.Background(), stmt)
 	if err != nil {
 		return nil, errors.New(fmt.Sprintf("Query for select task from table failed: %v\n", err))
