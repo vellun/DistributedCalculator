@@ -66,20 +66,28 @@ func InitRepository() { // Создание всех таблиц в бд
 	}
 	fmt.Println("All tables succesfully created ;)")
 
-	// Добавляем вычислители
-	for i := 0; i < 3; i++ {
-		stmt := "INSERT INTO computing_resources(ind, status, last_active) VALUES (%d, 'running', %d)"
-		_, err := conn.Exec(context.Background(), fmt.Sprintf(stmt, i+1, 0))
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Exec for set default computing resources failed: %v\n", err)
-			return
+	var n int
+	// Проверяем пустая ли таблица с вычислителями
+	num, _ := conn.Query(context.Background(), "SELECT COUNT(*) FROM computing_resources;")
+	for num.Next() {
+		num.Scan(&n)
+		// Если не пустая, ничего не делаем и выходим
+		if n == 0 {
+			// Добавляем вычислители
+			for i := 0; i < 3; i++ {
+				stmt := "INSERT INTO computing_resources(ind, status, last_active) VALUES (%d, 'running', %d)"
+				_, err := conn.Exec(context.Background(), fmt.Sprintf(stmt, i+1, 0))
+				if err != nil {
+					fmt.Fprintf(os.Stderr, "Exec for set default computing resources failed: %v\n", err)
+					return
+				}
+			}
+			fmt.Println("Succesfully inserted default computing resources")
 		}
 	}
-	fmt.Println("Succesfully inserted default computing resources")
 
-	var n int
 	// Проверяем пустая ли таблица с операциями
-	num, _ := conn.Query(context.Background(), "SELECT COUNT(*) FROM operations;")
+	num, _ = conn.Query(context.Background(), "SELECT COUNT(*) FROM operations;")
 	for num.Next() {
 		num.Scan(&n)
 		// Если не пустая, ничего не делаем и выходим

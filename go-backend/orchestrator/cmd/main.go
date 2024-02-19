@@ -2,7 +2,7 @@ package main
 
 import (
 	// "distributed-calculator/agent"
-	// "distributed-calculator/orchestrator/internal/database"
+	"distributed-calculator/orchestrator/internal/database"
 	"distributed-calculator/agent"
 	"distributed-calculator/orchestrator/internal/router"
 	"fmt"
@@ -13,7 +13,7 @@ const (
 )
 
 func main() {
-	// database.InitRepository()
+	database.InitRepository()
 	router := router.NewRouter()
 
 	agent.Resources.Init() // Создаются агенты

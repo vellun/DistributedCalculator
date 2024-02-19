@@ -1,6 +1,5 @@
 import { React } from "react";
 import "./ExpItem.css";
-import Button from "../Button/Button";
 
 function ExpItem({ expression, status, result, started_at, ended_at }) {
   const s = {};

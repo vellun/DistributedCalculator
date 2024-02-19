@@ -12,7 +12,7 @@ func GetAllAgents() ([]models.Agent, error) {
 	conn := database.Connect()
 	defer conn.Close(context.Background())
 
-	rows, err := conn.Query(context.Background(), "SELECT id, last_active, status, ind FROM computing_resources;")
+	rows, err := conn.Query(context.Background(), "SELECT id, last_active, status, ind FROM computing_resources ORDER BY id;")
 	if err != nil {
 		return nil, errors.New(fmt.Sprintf("Query for select agents from table failed: %v\n", err))
 	}

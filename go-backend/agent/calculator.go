@@ -34,6 +34,7 @@ func Calculator(task *models.Task, agent *Agent) {
 	arg2, _ := strconv.Atoi(task.Operand2)
 
 	go counter(arg1, arg2, task.Operation, task.Duration, channel)
+	time.Sleep(time.Second * time.Duration(task.Duration))
 
 	res := <-channel // Ждем пока задача посчитается
 	task.Result = res

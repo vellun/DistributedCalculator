@@ -8,7 +8,6 @@ function ExpressionsList() {
 
   async function fetchExps() {
     const resp = await axios.get("http://localhost:8000/expressions/");
-    console.log(resp)
     setExp(resp.data);
   }
 

@@ -22,6 +22,11 @@ func GetTask(agent *Agent) {
 
 	agent.Last_active = time.Now().Unix()                        // Агент запросил задачу, а значит надо отметить последнюю активность
 	err = database.UpdateLastActive(agent.Id, agent.Last_active) // Также отмечаем это в бд
+	if agent.Status == "missing"{
+	agent.Status = "running"
+	database.UpdateStatus(agent.Id, "running") // И меняем статус на случай если он был missing
+	}
+
 	if err != nil {
 		fmt.Println("Не удалось обновить время активности агента\n", agent.Id)
 	} else {

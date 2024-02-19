@@ -26,7 +26,6 @@ func AddExpressionIntoDB(exp *models.Expression) (int, error) { // Возвра�
 	for id.Next() {
 		id.Scan(&exp_id)
 	}
-	fmt.Println(id)
 
 	fmt.Println("Expression was succesfully insert")
 	return exp_id, nil

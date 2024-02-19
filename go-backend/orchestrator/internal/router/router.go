@@ -1,6 +1,7 @@
 package router
 
 import (
+	"distributed-calculator/agent"
 	"distributed-calculator/orchestrator/pkg/handler"
 	"time"
 
@@ -26,6 +27,7 @@ func NewRouter() *gin.Engine {
 	router.GET("/operations/", handler.GetOperationsHandler)         // Получить все операции из бд(+, -, *, /)
 	router.GET("/waiting-task/", handler.GetWaitingTaskHandler)      // Получить задачу, которую можно посчитать
 	router.GET("/agents/", handler.GetAgentsHandler)                 // Получить агентов
+	router.POST("/disconnect/", agent.DisconnectAgentHandler)       // Прервать соединение с агентом
 	router.POST("/expression/", handler.PostExpressionHandler)       // Получить введенное пользователем выражение
 	router.POST("/task/", handler.PostResultTaskHandler)             // Получить посчитанную задачу
 	router.POST("/operation/", handler.PostOperationDurationHandler) // Получить введенную пользователем длительность выполнения задачи

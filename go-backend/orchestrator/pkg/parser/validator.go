@@ -12,6 +12,10 @@ func ValidateExpression(exp string) ([]string, string, error) {
 
 	exp = strings.Join(strings.Fields(exp), "")
 
+	if strings.Contains(exp, "/0") {
+		return nil, "", errors.New("Деление на 0")
+	}
+
 	// Если в начале выражения не число и не открывающаяся скобка
 	if _, err := strconv.Atoi(string(exp[0])); err != nil && string(exp[0]) != "(" {
 		return nil, "", errors.New("Выражение должно начинаться с числа")

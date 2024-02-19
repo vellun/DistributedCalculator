@@ -6,28 +6,30 @@ import (
 )
 
 type Agent struct {
-	Id          int      `json:"id"`
-	Status      string   `json:"status"` //running/missing/dead
-	Last_active int64      `json:"last_active"`
-	Goroutines  int      // Количество горутин, которые сейчас задействует агент
-	Stop        chan int // Канал для остановки работы агента(нужен, если агент завис или связь с ним потеряна)
+	Id          int    `json:"id"`
+	Status      string `json:"status"` //running/missing/dead
+	Last_active int64  `json:"last_active"`
+	Goroutines  int    // Количество горутин, которые сейчас задействует агент
 }
 
 func (ag *Agent) RunAgent() { // Функция запуска агента
 	fmt.Printf("Agent %d is running\n", ag.Id)
 	for {
+		fmt.Printf("Агент %d, Статус %s\n", ag.Id, ag.Status)
+		if ag.Status == "dead" {
+			fmt.Printf("Агент %d: Я умер, выхожу\n", ag.Id)
+			return
+		}
 		go func(id int) {
-			select {
-			case <-ag.Stop:
-				break
-			case <-ticker.C:
-				GetTask(ag) // Запрашиваем задачу у оркестратора
-			}
+			<-ticker.C
+			GetTask(ag) // Запрашиваем задачу у оркестратора
+
 		}(ag.Id)
 		time.Sleep(interval + 2)
 	}
+
 }
 
 func NewAgent(id int) *Agent {
-	return &Agent{Id: id, Status: "running", Goroutines: 0}
+	return &Agent{Id: id, Status: "running"}
 }

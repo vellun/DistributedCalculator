@@ -11,7 +11,7 @@ func UpdateStatus(id int, status string) error {
 	conn := database.Connect()
 	defer conn.Close(context.Background())
 
-	stmt := `UPDATE computing_resources SET status=%s WHERE id=%d`
+	stmt := `UPDATE computing_resources SET status='%s' WHERE id=%d`
 	_, err := conn.Query(context.Background(), fmt.Sprintf(stmt, status, id))
 
 	if err != nil {
