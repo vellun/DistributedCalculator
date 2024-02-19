@@ -53,7 +53,7 @@ function AgentItem({ id, status, last_active }) {
   return (
     <div className="agent">
       <div className="agent_content">
-        <h2>Agent {id}</h2>
+        <h2>☆Agent {id}</h2>
         <ul>
           <li>
             Status: <span style={s}>{stat}</span>

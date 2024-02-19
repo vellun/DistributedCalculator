@@ -2,14 +2,14 @@ package database
 
 import (
 	"context"
-	"distributed-calculator/orchestrator/internal/database"
 	"distributed-calculator/orchestrator/pkg/models"
+	"distributed-calculator/orchestrator/postgres"
 	"errors"
 	"fmt"
 )
 
 func GetAllOperations() ([]models.Operation, error) {
-	conn := database.Connect()
+	conn := postgres.Connect()
 	defer conn.Close(context.Background())
 
 	rows, err := conn.Query(context.Background(), "SELECT id, name, duration FROM operations ORDER BY id;")

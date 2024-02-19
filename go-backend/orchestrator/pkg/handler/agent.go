@@ -2,7 +2,6 @@ package handler
 
 import (
 	"distributed-calculator/orchestrator/pkg/database"
-	// "distributed-calculator/orchestrator/pkg/models"
 	"fmt"
 	"net/http"
 

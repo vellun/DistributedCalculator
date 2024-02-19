@@ -2,15 +2,15 @@ package database
 
 import (
 	"context"
-	"distributed-calculator/orchestrator/internal/database"
 	"distributed-calculator/orchestrator/pkg/models"
+	"distributed-calculator/orchestrator/postgres"
 	"errors"
 	"fmt"
 )
 
 // Функция берет из бд первое найденное подвыражение со статусом waiting
 func GetWaitingTask() (*models.Task, error) {
-	conn := database.Connect()
+	conn := postgres.Connect()
 	defer conn.Close(context.Background())
 
 	rows, err := conn.Query(context.Background(), "SELECT id FROM expressions WHERE status = 'process' ORDER BY id;")
@@ -45,7 +45,7 @@ func GetWaitingTask() (*models.Task, error) {
 
 	var n int
 
-	conn = database.Connect()
+	conn = postgres.Connect()
 	defer conn.Close(context.Background())
 	num, err := conn.Query(context.Background(), is_null_stmt)
 	if err != nil {
@@ -60,7 +60,7 @@ func GetWaitingTask() (*models.Task, error) {
 		}
 	}
 
-	conn = database.Connect()
+	conn = postgres.Connect()
 	defer conn.Close(context.Background())
 	rows, err = conn.Query(context.Background(), stmt)
 	if err != nil {

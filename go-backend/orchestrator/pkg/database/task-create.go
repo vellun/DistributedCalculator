@@ -2,13 +2,13 @@ package database
 
 import (
 	"context"
-	"distributed-calculator/orchestrator/internal/database"
 	"distributed-calculator/orchestrator/pkg/models"
+	"distributed-calculator/orchestrator/postgres"
 	"fmt"
 )
 
 func AddTaskIntoDB(task *models.Task) error {
-	conn := database.Connect()
+	conn := postgres.Connect()
 	defer conn.Close(context.Background())
 
 	// Если в качестве одного из членов подвыражения должна быть ссылка на другое подвыражение
@@ -60,7 +60,7 @@ func GetTasksId(task *models.Task) (int, int) {
 		task_id2 int
 	)
 
-	conn := database.Connect()
+	conn := postgres.Connect()
 	defer conn.Close(context.Background())
 	// Получаем id нужного подвыражения
 	id1, _ := conn.Query(context.Background(), selectStmt1)
@@ -68,7 +68,7 @@ func GetTasksId(task *models.Task) (int, int) {
 		id1.Scan(&task_id1)
 	}
 
-	conn = database.Connect()
+	conn = postgres.Connect()
 	defer conn.Close(context.Background())
 	id2, _ := conn.Query(context.Background(), selectStmt2)
 	for id2.Next() {
@@ -79,7 +79,7 @@ func GetTasksId(task *models.Task) (int, int) {
 
 func GetOperationId(task *models.Task) int {
 	var id int
-	conn := database.Connect()
+	conn := postgres.Connect()
 	defer conn.Close(context.Background())
 	stmt := fmt.Sprintf("SELECT id FROM operations WHERE name='%s';", task.Operation)
 	op_id, _ := conn.Query(context.Background(), stmt)

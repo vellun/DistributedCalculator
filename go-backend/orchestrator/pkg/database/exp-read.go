@@ -2,14 +2,14 @@ package database
 
 import (
 	"context"
-	"distributed-calculator/orchestrator/internal/database"
 	"distributed-calculator/orchestrator/pkg/models"
+	"distributed-calculator/orchestrator/postgres"
 	"errors"
 	"fmt"
 )
 
 func GetAllExpressions() ([]models.Expression, error) {
-	conn := database.Connect()
+	conn := postgres.Connect()
 	defer conn.Close(context.Background())
 
 	rows, err := conn.Query(context.Background(), "SELECT id, expression, status, started_at, ended_at, COALESCE(result, '') FROM expressions ORDER BY id DESC;")

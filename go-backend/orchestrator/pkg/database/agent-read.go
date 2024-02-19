@@ -2,14 +2,14 @@ package database
 
 import (
 	"context"
-	"distributed-calculator/orchestrator/internal/database"
 	"distributed-calculator/orchestrator/pkg/models"
+	"distributed-calculator/orchestrator/postgres"
 	"errors"
 	"fmt"
 )
 
 func GetAllAgents() ([]models.Agent, error) {
-	conn := database.Connect()
+	conn := postgres.Connect()
 	defer conn.Close(context.Background())
 
 	rows, err := conn.Query(context.Background(), "SELECT id, last_active, status, ind FROM computing_resources ORDER BY id;")
