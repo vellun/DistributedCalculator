@@ -10,8 +10,9 @@ const (
 
 var ticker = time.NewTicker(interval)
 
-func RunAgentManager(agents *CompResources) {
-	for _, agent := range agents.Agents { // Запускаем всех агентов
+func RunAgentManager() {
+	for _, agent := range Resources.Agents { // Запускаем всех агентов
 		go agent.RunAgent()
 	}
+	go RunHealthChecker() // Запускаем проверку активности агентов
 }

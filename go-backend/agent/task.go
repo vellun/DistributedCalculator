@@ -1,11 +1,13 @@
 package agent
 
 import (
+	"distributed-calculator/orchestrator/pkg/database"
 	"distributed-calculator/orchestrator/pkg/models"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
+	"time"
 )
 
 // Здесь агент запрашивает у оркестратора задачу и отправляет на вычисление
@@ -17,6 +19,14 @@ func GetTask(agent *Agent) {
 		return
 	}
 	fmt.Println("Задача запрошена агентом", agent.Id)
+
+	agent.Last_active = time.Now().Unix()                        // Агент запросил задачу, а значит надо отметить последнюю активность
+	err = database.UpdateLastActive(agent.Id, agent.Last_active) // Также отмечаем это в бд
+	if err != nil {
+		fmt.Println("Не удалось обновить время активности агента\n", agent.Id)
+	} else {
+		fmt.Printf("Агент %d: Время последней активности обновлено\n", agent.Id)
+	}
 
 	if resp.StatusCode == 404 {
 		fmt.Printf("Агент %d: Нет доступных задач\n", agent.Id)
@@ -45,7 +55,7 @@ func GetTask(agent *Agent) {
 
 	fmt.Printf("У агента %d %d горутин\n", agent.Id, agent.Goroutines)
 
-	if agent.Goroutines < 5 {  // Если действующих горутин у агента < 5
+	if agent.Goroutines < 5 { // Если действующих горутин у агента < 5
 		// Отправляем задачу считаться
 		agent.Goroutines++
 		go Calculator(&task, agent)

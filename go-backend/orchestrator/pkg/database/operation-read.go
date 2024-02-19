@@ -12,7 +12,7 @@ func GetAllOperations() ([]models.Operation, error) {
 	conn := database.Connect()
 	defer conn.Close(context.Background())
 
-	rows, err := conn.Query(context.Background(), "SELECT id, name, duration FROM operations;")
+	rows, err := conn.Query(context.Background(), "SELECT id, name, duration FROM operations ORDER BY id;")
 	if err != nil {
 		return nil, errors.New(fmt.Sprintf("Query for select operations from table failed: %v\n", err))
 	}
