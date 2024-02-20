@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Получить все операции
+// Получить всех агентов
 func GetAgentsHandler(c *gin.Context) {
 	agents, err := database.GetAllAgents()
 	if err != nil {
