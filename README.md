@@ -9,7 +9,7 @@
 
 #### Далее склонируйте репозиторий
 ```
-$ git clone https://github.com/vellun/distributed-calculator--Clone
+$ git clone https://github.com/vellun/distributed-calculator
 ```
 #### Находясь в корневой папке проекта, выполните следующую команду
 
@@ -21,5 +21,5 @@ $ docker-compose up
 ``` 
 http://localhost:3000/
 ```
-
+Я еще не доделала ридми, проверьте чуть позже пж
 
