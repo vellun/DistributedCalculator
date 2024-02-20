@@ -27,7 +27,7 @@ http://localhost:3000/
 
 ### Схема работы приложения
 
-![Схема тут]([https://github.com/vellun/distributed-calculator/blob/[branch]/image.jpg](https://github.com/vellun/distributed-calculator/blob/main/docs/calc-scheme.png)?raw=true)
+![Схема тут](https://github.com/vellun/distributed-calculator/blob/main/docs/calc-scheme.png?raw=true)
 
 ## Принцип работы
 
