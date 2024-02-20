@@ -2,12 +2,10 @@ package agent
 
 import (
 	"time"
-
-	"github.com/spf13/viper"
 )
 
 var (
-	interval time.Duration = time.Duration(viper.GetInt64("agent.get_task_time")) * time.Second // Интервал времени между запросами задач
+	interval time.Duration = 10 * time.Second // Интервал времени между запросами задач
 )
 
 var ticker = time.NewTicker(interval) // Тикер с заданным интервалом
