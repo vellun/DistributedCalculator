@@ -2,34 +2,40 @@ version: '3.8'
 
 services:
   go-app:
+    restart: always
     build: ./go-backend
     command: ./go-app
     ports:
-      - 8000:8000
+      - "8000:8000"
     depends_on:
-      - db
+      - postgres
     environment:
       DB_PASSWORD: postgres
+    networks:
+      - app-network
 
   react:
     build: ./react-frontend
     ports:
       - "3000:3000"
 
-  db:
+  postgres:
     restart: always
-    image: postgres:latest
+    image: postgres
     volumes:
-    - ./.database/postgres/data:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
     ports:
-      - 5436:5432
+      - "5432:5432"
     networks:
-      - app_network
+      - app-network
 
 networks:
-  app_network:
+  app-network:
     driver: bridge
+
+volumes:
+  pgdata:

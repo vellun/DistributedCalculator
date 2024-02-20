@@ -10,10 +10,8 @@ import (
 
 func Connect() *pgx.Conn {
 	params := GetDBParams()
-	fmt.Println(params.Password)
-	// db_url := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s", params.Username, params.Password,
-	// 	params.Host, params.Port, params.DBName)
-	db_url := "postgresql://postgres:postgres@db:5432/db-1"
+	db_url := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=disable", params.Username, params.Password,
+		params.Host, params.Port, params.DBName)
 	conn, err := pgx.Connect(context.Background(), db_url)
 	if err != nil {
 		fmt.Printf("Unable to acquire a database connection: %v\n", err)
