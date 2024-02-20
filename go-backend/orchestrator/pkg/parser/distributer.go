@@ -8,7 +8,7 @@ import (
 )
 
 func DistributeTask(exp string) error {
-	postfix_slice, exp_id, err := ParseExpression(exp)
+	postfix_slice, exp_id, err := ParseExpression(exp)  // Получаем постфиксную запись
 	if err != nil {
 		fmt.Println(err)
 		return err

@@ -16,12 +16,12 @@ func main() {
 		log.Fatalf("Error initializing configs: %s", err)
 	}
 
-	postgres.InitRepository()
-	router := router.NewRouter()
+	postgres.InitRepository()  // Создаем все таблицы в бд если их нет
+	router := router.NewRouter()  // Роутер запросов
 
 	agent.Resources.Init() // Создаются агенты
 
-	agent.RunAgentManager() // Запускаем горутину менеджера агентов
+	agent.RunAgentManager() // Запускаем менеджера агентов
 	// Она запустит агентов(горутины), которые будут запрашивать у оркестратора задачи для решения через установленные промежутки времени,
 	// а затем отправлять на решение одному из своих воркеров(горутине)
 

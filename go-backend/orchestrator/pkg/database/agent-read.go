@@ -8,6 +8,7 @@ import (
 	"fmt"
 )
 
+// Получение всех агентов из бд
 func GetAllAgents() ([]models.Agent, error) {
 	conn := postgres.Connect()
 	defer conn.Close(context.Background())

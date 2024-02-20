@@ -9,6 +9,7 @@ import (
 	"time"
 )
 
+// Добавление выражения в бд, используется когда пользователь вводит выражение
 func AddExpressionIntoDB(exp *models.Expression) (int, error) { // Возвращает id добавленного выражения
 	conn := postgres.Connect()
 	defer conn.Close(context.Background())

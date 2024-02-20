@@ -8,7 +8,7 @@ import (
 	"fmt"
 )
 
-// Функция берет из бд первое найденное подвыражение со статусом waiting
+// Функция берет из бд первое найденное подвыражение со статусом process
 func GetWaitingTask() (*models.Task, error) {
 	conn := postgres.Connect()
 	defer conn.Close(context.Background())

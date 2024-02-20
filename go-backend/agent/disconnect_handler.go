@@ -12,6 +12,7 @@ type agentId struct {
 	Id int
 }
 
+// Обработка запроса на отключение агента с фронтенда
 func DisconnectAgentHandler(c *gin.Context) {
 	var recieved_id agentId
 

@@ -4,17 +4,23 @@ import (
 	"distributed-calculator/orchestrator/pkg/database"
 	"fmt"
 	"time"
+
+	"github.com/spf13/viper"
 )
 
-const (
-	health_check_interval  time.Duration = 40 * time.Second  // Интервал времени между проверками состояния агентов
-	max_inactive_time      time.Duration = 120 * time.Second // Максимально допустимое время неактивности агента чтобы он перешел в статус missing
-	very_max_inactive_time time.Duration = 180 * time.Second // Максимально допустимое время неактивности агента чтобы он перешел в статус dead
+// Переменные берутся из файла конфига
+var (
+	// Интервал времени между проверками состояния агентов
+	health_check_interval  time.Duration = time.Duration(viper.GetInt64("health.health_check_interval")) * time.Second 
+	// Максимально допустимое время неактивности агента чтобы он перешел в статус missing
+	max_inactive_time      time.Duration = time.Duration(viper.GetInt64("health.max_inactive_time")) * time.Second 
+	// Максимально допустимое время неактивности агента чтобы он перешел в статус dead                                                          
+	very_max_inactive_time time.Duration = time.Duration(viper.GetInt64("health.very_max_inactive_time")) * time.Second                                                             
 )
 
 var health_ticker = time.NewTicker(health_check_interval)
 
-// Горутина для переодичнской проверки состояния агентов и отлавливания умерших
+// Горутина для переодической проверки состояния агентов и отлавливания умерших
 func RunHealthChecker() {
 	fmt.Println("Health checker is running")
 	for {
@@ -24,7 +30,7 @@ func RunHealthChecker() {
 			for _, agent := range Resources.Agents { // Чекаем всех агентов
 
 				if agent.Status == "dead" {
-					ReplaceDeadAgent(agent)
+					ReplaceDeadAgent(agent)  // Если помер, отправляется на замену
 					fmt.Printf("Агент %d был заменен\n", agent.Id)
 				}
 
@@ -63,6 +69,6 @@ func ReplaceDeadAgent(agent *Agent) {
 	// Добавляем нового агента и присваиваем ему id старого
 	Resources.Agents = append(Resources.Agents, new)
 	database.UpdateStatus(agent.Id, "running") // В бд обновляем у старого агента статус на running
-	go new.RunAgent()
+	go new.RunAgent()  // Запуск нового агента
 	fmt.Printf("New agent %d is running", new.Id)
 }

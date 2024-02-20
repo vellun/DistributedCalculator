@@ -27,13 +27,14 @@ func counter(arg1, arg2 int, op string, duration int, ch chan int) {
 
 }
 
+// Сюда попадает задача от агента
 func Calculator(task *models.Task, agent *Agent) {
 	channel := make(chan int)
 
 	arg1, _ := strconv.Atoi(task.Operand1)
 	arg2, _ := strconv.Atoi(task.Operand2)
 
-	go counter(arg1, arg2, task.Operation, task.Duration, channel)
+	go counter(arg1, arg2, task.Operation, task.Duration, channel) // Отправляем задачу считаться
 	time.Sleep(time.Second * time.Duration(task.Duration))
 
 	res := <-channel // Ждем пока задача посчитается

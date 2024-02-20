@@ -8,6 +8,7 @@ import (
 	"fmt"
 )
 
+// Получение всех выражений для страницы истории
 func GetAllExpressions() ([]models.Expression, error) {
 	conn := postgres.Connect()
 	defer conn.Close(context.Background())

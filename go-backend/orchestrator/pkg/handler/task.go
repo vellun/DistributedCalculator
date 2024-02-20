@@ -30,7 +30,7 @@ func PostResultTaskHandler(c *gin.Context) {
 		return
 	}
 
-	err := database.SetTaskResult(&task)
+	err := database.SetTaskResult(&task)  // Делаем изменения в бд
 
 	if err != nil {
 		fmt.Println(err)

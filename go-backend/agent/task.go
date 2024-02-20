@@ -8,6 +8,8 @@ import (
 	"io"
 	"net/http"
 	"time"
+
+	"github.com/spf13/viper"
 )
 
 // Здесь агент запрашивает у оркестратора задачу и отправляет на вычисление
@@ -22,9 +24,9 @@ func GetTask(agent *Agent) {
 
 	agent.Last_active = time.Now().Unix()                        // Агент запросил задачу, а значит надо отметить последнюю активность
 	err = database.UpdateLastActive(agent.Id, agent.Last_active) // Также отмечаем это в бд
-	if agent.Status == "missing"{
-	agent.Status = "running"
-	database.UpdateStatus(agent.Id, "running") // И меняем статус на случай если он был missing
+	if agent.Status == "missing" {  // Если агент был потерян, но вышел на связь, меняем статус
+		agent.Status = "running"
+		database.UpdateStatus(agent.Id, "running") // И меняем статус в бд
 	}
 
 	if err != nil {
@@ -60,7 +62,7 @@ func GetTask(agent *Agent) {
 
 	fmt.Printf("У агента %d %d горутин\n", agent.Id, agent.Goroutines)
 
-	if agent.Goroutines < 5 { // Если действующих горутин у агента < 5
+	if agent.Goroutines < viper.GetInt("agent.goroutines") { // Если действующих горутин у агента < установленного значения
 		// Отправляем задачу считаться
 		agent.Goroutines++
 		go Calculator(&task, agent)

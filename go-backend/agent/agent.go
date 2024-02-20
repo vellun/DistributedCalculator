@@ -15,9 +15,8 @@ type Agent struct {
 func (ag *Agent) RunAgent() { // Функция запуска агента
 	fmt.Printf("Agent %d is running\n", ag.Id)
 	for {
-		fmt.Printf("Агент %d, Статус %s\n", ag.Id, ag.Status)
 		if ag.Status == "dead" {
-			fmt.Printf("Агент %d: Я умер, выхожу\n", ag.Id)
+			fmt.Printf("Агент %d: Я умер, не буду запрашивать задачу\n", ag.Id)
 			return
 		}
 		go func(id int) {

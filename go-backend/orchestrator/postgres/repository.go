@@ -20,7 +20,7 @@ func Connect() *pgx.Conn {
 	return conn
 }
 
-func InitRepository() { // Создание всех таблиц в бд
+func InitRepository() { // Создание всех таблиц в бд и заполнение таблиц операций и агентов
 	var create_tables_stmt = `
 		CREATE TABLE IF NOT EXISTS expressions(
 			id INT generated always AS IDENTITY PRIMARY KEY,

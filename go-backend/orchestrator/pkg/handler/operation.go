@@ -20,6 +20,7 @@ func GetOperationsHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, operations)
 }
 
+// Когда пользователь меняет время выполнения операции
 func PostOperationDurationHandler(c *gin.Context) {
 	var recieved_op models.Operation
 

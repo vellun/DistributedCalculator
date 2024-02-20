@@ -11,7 +11,7 @@ import (
 
 func NewRouter() *gin.Engine {
 	router := gin.Default()
-	router.Use(cors.New(cors.Config{
+	router.Use(cors.New(cors.Config{ // Cors для взаимодействия с фронтендом
 		AllowOrigins:     []string{"http://localhost:3000"},
 		AllowMethods:     []string{"PUT", "PATCH", "POST", "GET", "DELETE"},
 		AllowHeaders:     []string{"Origin", "Authorization", "Content-Type", "Accept-Encoding", "Access-Control-Allow-Headers", "Access-Control-Allow-Origin"},
@@ -27,7 +27,7 @@ func NewRouter() *gin.Engine {
 	router.GET("/operations/", handler.GetOperationsHandler)         // Получить все операции из бд(+, -, *, /)
 	router.GET("/waiting-task/", handler.GetWaitingTaskHandler)      // Получить задачу, которую можно посчитать
 	router.GET("/agents/", handler.GetAgentsHandler)                 // Получить агентов
-	router.POST("/disconnect/", agent.DisconnectAgentHandler)       // Прервать соединение с агентом
+	router.POST("/disconnect/", agent.DisconnectAgentHandler)        // Прервать соединение с агентом
 	router.POST("/expression/", handler.PostExpressionHandler)       // Получить введенное пользователем выражение
 	router.POST("/task/", handler.PostResultTaskHandler)             // Получить посчитанную задачу
 	router.POST("/operation/", handler.PostOperationDurationHandler) // Получить введенную пользователем длительность выполнения задачи

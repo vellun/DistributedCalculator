@@ -7,6 +7,7 @@ import (
 	"fmt"
 )
 
+// Добавление подвыражения в бд с учетом того, что части выражения могут ссылаться друг на друга
 func AddTaskIntoDB(task *models.Task) error {
 	conn := postgres.Connect()
 	defer conn.Close(context.Background())
@@ -77,6 +78,7 @@ func GetTasksId(task *models.Task) (int, int) {
 	return task_id1, task_id2
 }
 
+// id операции, которая используется в подвыражении, чтобы добавить на нее ссылку в таблицу с подвыражениями
 func GetOperationId(task *models.Task) int {
 	var id int
 	conn := postgres.Connect()

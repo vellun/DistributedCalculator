@@ -8,6 +8,7 @@ import (
 	"fmt"
 )
 
+// Получение всех операция для страницы с операциями
 func GetAllOperations() ([]models.Operation, error) {
 	conn := postgres.Connect()
 	defer conn.Close(context.Background())
